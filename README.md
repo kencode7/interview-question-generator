@@ -52,16 +52,6 @@ Copy the example config and add your key:
 cp config.example.js config.js
 ```
 
-Open `config.js` and paste your Groq API key:
-
-```js
-const CONFIG = {
-  GROQ_API_KEY: "your_key_here",   // ← paste here
-  GROQ_MODEL:   "llama-3.3-70b-versatile",
-  GROQ_API_URL: "https://api.groq.com/openai/v1/chat/completions",
-};
-```
-
 Get a free API key at [console.groq.com/keys](https://console.groq.com/keys).
 
 ### 3. Serve the app
