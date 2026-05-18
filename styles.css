@@ -1,0 +1,447 @@
+/* ─────────────────────────────────────────
+   1. CSS VARIABLES & RESET
+───────────────────────────────────────── */
+
+/* Dark mode (default) */
+:root {
+  --color-bg: #0d1117;
+  --color-surface: #161d2a;
+  --color-surface-hover: #1d2738;
+  --color-border: #243045;
+  --color-accent: #4a9ee8;
+  --color-accent-glow: rgba(74, 158, 232, 0.22);
+  --color-accent-hover: #6db5f0;
+  --color-text-primary: #e8edf5;
+  --color-text-secondary: #8494ab;
+  --color-error: #ff5e7a;
+  --color-error-bg: rgba(255, 94, 122, 0.1);
+  --color-success: #4adbb5;
+  --radius-card: 16px;
+  --radius-input: 12px;
+  --radius-btn: 12px;
+  --shadow-card: 0 4px 32px rgba(0, 0, 0, 0.45);
+  --transition: 0.22s ease;
+  --font: "Inter", system-ui, sans-serif;
+}
+
+/* Light mode overrides */
+[data-theme="light"] {
+  --color-bg: #f2f6fb;
+  --color-surface: #ffffff;
+  --color-surface-hover: #e8f0fa;
+  --color-border: #d0dcea;
+  --color-accent: #2b72c8;
+  --color-accent-glow: rgba(43, 114, 200, 0.14);
+  --color-accent-hover: #3d85d8;
+  --color-text-primary: #0f1d2e;
+  --color-text-secondary: #556070;
+  --color-error: #d63a5a;
+  --color-error-bg: rgba(214, 58, 90, 0.08);
+  --color-success: #1a8f5e;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  /* Smooth transition when switching themes */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─────────────────────────────────────────
+   2. LAYOUT
+───────────────────────────────────────── */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 40px 16px 80px;
+}
+
+.container {
+  width: 100%;
+  max-width: 680px;
+}
+
+/* ─────────────────────────────────────────
+   3. HEADER
+───────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent-glow);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.header__badge span {
+  width: 7px;
+  height: 7px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.header h1 {
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 0.97rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────
+   4. INPUT CARD
+───────────────────────────────────────── */
+.input-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 28px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Wrapper holds the text input + button side-by-side on wider screens */
+.input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#job-title-input {
+  flex: 1 1 220px;
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-input);
+  color: var(--color-text-primary);
+  font-family: var(--font);
+  font-size: 0.97rem;
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  min-width: 0; /* prevents overflow on small screens */
+}
+
+#job-title-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+#job-title-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+}
+
+/* Disabled state for the input while loading */
+#job-title-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─────────────────────────────────────────
+   5. SUBMIT BUTTON
+───────────────────────────────────────── */
+#submit-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 13px 22px;
+  border: none;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition),
+    box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+#submit-btn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px var(--color-accent-glow);
+}
+
+#submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Disabled / loading state for the button */
+#submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─────────────────────────────────────────
+   6. SPINNER (inside button & standalone)
+───────────────────────────────────────── */
+.spinner {
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────
+   7. ERROR MESSAGE
+───────────────────────────────────────── */
+#error-message {
+  display: none; /* shown via JS */
+  background: var(--color-error-bg);
+  border: 1px solid rgba(255, 94, 122, 0.3);
+  border-radius: var(--radius-input);
+  color: var(--color-error);
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+#error-message.visible {
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   8. RESULTS SECTION
+───────────────────────────────────────── */
+#results-section {
+  display: none; /* shown via JS once we have questions */
+}
+
+#results-section.visible {
+  display: block;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.results-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.results-header .role-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-glow);
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+}
+
+/* Individual question card */
+.question-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  box-shadow: var(--shadow-card);
+
+  /* Fade-in animation on entry */
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fadeSlideIn 0.4s ease forwards;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.question-card:hover {
+  background: var(--color-surface-hover);
+  border-color: rgba(108, 99, 255, 0.3);
+}
+
+/* Stagger each card's animation delay */
+.question-card:nth-child(1) { animation-delay: 0.05s; }
+.question-card:nth-child(2) { animation-delay: 0.15s; }
+.question-card:nth-child(3) { animation-delay: 0.25s; }
+
+.question-number {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: var(--color-accent-glow);
+  border: 1px solid rgba(108, 99, 255, 0.4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.question-text {
+  font-size: 0.97rem;
+  line-height: 1.65;
+  color: var(--color-text-primary);
+  padding-top: 4px;
+}
+
+/* ─────────────────────────────────────────
+   9. THEME TOGGLE BUTTON
+───────────────────────────────────────── */
+#theme-toggle {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 100;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), border-color var(--transition),
+    color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+#theme-toggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: rotate(20deg) scale(1.08);
+}
+
+#theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+/* ─────────────────────────────────────────
+   10. FOOTER
+───────────────────────────────────────── */
+.footer {
+  text-align: center;
+  margin-top: 48px;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+}
+
+.footer a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────
+   11. KEYFRAMES
+───────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────
+   12. RESPONSIVE ADJUSTMENTS
+───────────────────────────────────────── */
+@media (max-width: 480px) {
+  .input-card {
+    padding: 20px 18px;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  #submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .question-card {
+    padding: 18px;
+  }
+}
