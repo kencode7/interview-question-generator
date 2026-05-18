@@ -44,8 +44,10 @@ async function handleSubmit() {
     return;
   }
 
-  // Guard: check the API key has been set
-  if (!CONFIG.GROQ_API_KEY || CONFIG.GROQ_API_KEY === "YOUR_GROQ_API_KEY_HERE") {
+  // On production (Netlify) there is no CONFIG — the key lives server-side.
+  // Only check for the key when running locally.
+  const isLocal = ["localhost", "127.0.0.1"].includes(location.hostname);
+  if (isLocal && (!CONFIG.GROQ_API_KEY || CONFIG.GROQ_API_KEY === "YOUR_GROQ_API_KEY_HERE")) {
     showError("No API key found. Open config.js and paste your Groq API key.");
     return;
   }
@@ -65,27 +67,42 @@ async function handleSubmit() {
 }
 
 // ─────────────────────────────────────────────
-// API — Groq chat completions (OpenAI-compatible)
+// API — routes to Netlify function in production,
+//        calls Groq directly on localhost
 // ─────────────────────────────────────────────
 async function fetchInterviewQuestions(jobTitle) {
-  const prompt =
-    `Generate exactly 3 thoughtful and professional interview questions for a ` +
-    `candidate applying for the role of ${jobTitle}. Keep the questions concise, ` +
-    `practical, and specific to the role. Return only the numbered list, no extra commentary.`;
+  const isLocal = ["localhost", "127.0.0.1"].includes(location.hostname);
 
-  const response = await fetch(CONFIG.GROQ_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type":  "application/json",
-      "Authorization": `Bearer ${CONFIG.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: CONFIG.GROQ_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.8,
-      max_tokens:  512,
-    }),
-  });
+  let response;
+
+  if (isLocal) {
+    // ── Local dev: call Groq directly using config.js ──────────────────
+    const prompt =
+      `Generate exactly 3 thoughtful and professional interview questions for a ` +
+      `candidate applying for the role of ${jobTitle}. Keep the questions concise, ` +
+      `practical, and specific to the role. Return only the numbered list, no extra commentary.`;
+
+    response = await fetch(CONFIG.GROQ_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type":  "application/json",
+        "Authorization": `Bearer ${CONFIG.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model:       CONFIG.GROQ_MODEL,
+        messages:    [{ role: "user", content: prompt }],
+        temperature: 0.8,
+        max_tokens:  512,
+      }),
+    });
+  } else {
+    // ── Production: proxy via Netlify serverless function ──────────────
+    response = await fetch("/.netlify/functions/generate-questions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jobTitle }),
+    });
+  }
 
   // Handle non-2xx HTTP errors with friendly messages
   if (!response.ok) {
