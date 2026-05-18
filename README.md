@@ -11,7 +11,6 @@
 - 🌙 **Dark / Light mode** toggle with OS preference detection and `localStorage` persistence
 - 📱 **Fully responsive** — works on mobile, tablet, and desktop
 - ♿ **Accessible** — semantic HTML, ARIA labels, keyboard navigation (Enter to submit)
-- 🔒 **API key stays local** — config is gitignored and never committed
 
 ---
 
@@ -28,8 +27,6 @@ interview-question-generator/
 ├── index.html          # App markup (no inline styles or scripts)
 ├── styles.css          # All CSS — variables, components, dark/light themes
 ├── app.js              # All JavaScript — API calls, DOM, theme toggle
-├── config.js           # 🔑 Your API key (gitignored — never commit this)
-├── config.example.js   # Template — safe to commit
 └── .gitignore
 ```
 
@@ -44,15 +41,6 @@ git clone https://github.com/your-username/interview-question-generator.git
 cd interview-question-generator
 ```
 
-### 2. Set up your API key
-
-Copy the example config and add your key:
-
-```bash
-cp config.example.js config.js
-```
-
-Get a free API key at [console.groq.com/keys](https://console.groq.com/keys).
 
 ### 3. Serve the app
 
@@ -79,16 +67,8 @@ Then open [http://localhost:3456](http://localhost:3456) in your browser.
 | Markup | Semantic HTML5 |
 | Styling | Vanilla CSS (custom properties, no framework) |
 | Logic | Vanilla JavaScript (no bundler required) |
-| AI | [Groq API](https://console.groq.com) — LLaMA 3.3 70B |
+| AI | [Groq ] — LLaMA 3.3 70B |
 | Font | [Inter](https://fonts.google.com/specimen/Inter) via Google Fonts |
-
----
-
-## 🔐 Security Note
-
-`config.js` (which contains your API key) is listed in `.gitignore` and will **never** be committed. Only `config.example.js` — which contains a placeholder — is tracked by git.
-
-If you plan to deploy this publicly, move the API call to a server-side function or proxy to avoid exposing your key in client-side code.
 
 ---
 
